@@ -1,0 +1,14 @@
+{
+  "title": "BaiduMap",
+  "debug": true,
+  "console": true,
+  "websocketserver": {
+    "wss_port": 1883,
+    "wss_address": "0.0.0.0"
+  },
+  "common": {
+    "latitude": 22.5485544122,
+    "longitude": 114.0661345267,
+    "simulationThreads": 5
+  }
+}
