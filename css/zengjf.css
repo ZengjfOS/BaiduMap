@@ -1,0 +1,43 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.container {
+  background-color: #2ba6cb;
+  height: 100%;
+}
+
+.topContainer {
+  background-color: #000000;
+  padding: 0 90px;
+  color: #fff;
+}
+
+.bottomContainer {
+  height: 100%;
+}
+
+.leftContainer {
+  background-color: #eee;
+  border-right: 2px solid #bbb;
+  height: 100%;
+}
+
+.rightContainer {
+  background-color: #eee;
+  padding: 10px 50px;
+  height: 100%;
+}
+
+.systemSettings {
+    display: block;
+}
+
+.devicePositionMap {
+    display: none;
+}
+
+.deviceTemperature {
+    display: none;
+}
