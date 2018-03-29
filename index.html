@@ -24,97 +24,59 @@
       </div>
       <div class="row clearfix bottomContainer">
         <div class="col-md-3 column text-center leftContainer">
-          <h2> Menu </h2>
-          <hr />
-          <button type="button" class="btn btn-default w-100 mt-2" onclick="systemSettings_click()"> System Settings</button>
-          <button type="button" class="btn btn-default w-100 mt-2" onclick="devicePositionMap_click()">Device Position Map</button>
-          <button type="button" class="btn btn-default w-100 mt-2" onclick="deviceTemperature_click()">Device Temperature</button>
-          <hr />
+          <script type="text/template" id="nav_tpl">
+            <h2> Menu </h2>
+            <hr />
+            <% _.each(obj, function(e, i) { %>
+                <button type="button" class="btn btn-default w-100 mt-2" onclick="<%= i %>_click()"> <%= e %> </button>
+            <% }) %>
+            <hr />
+          </script>
         </div>
         <div class="col-md-9 column rightContainer">
           <div class="systemSettings">
-            <h2> System Settings </h2>
-            <hr />
-            <div class="row clearfix">
-              <div class="col-md-12 column">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>
-                        index
-                      </th>
-                      <th>
-                        name
-                      </th>
-                      <th>
-                        value
-                      </th>
-                      <th>
-                        Info
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="success">
-                      <td>
-                        1
-                      </td>
-                      <td>
-                        Country
-                      </td>
-                      <td>
-                        01/04/2012
-                      </td>
-                      <td>
-                        Approved
-                      </td>
-                    </tr>
-                    <tr class="error">
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        TB - Monthly
-                      </td>
-                      <td>
-                        02/04/2012
-                      </td>
-                      <td>
-                        Declined
-                      </td>
-                    </tr>
-                    <tr class="warning">
-                      <td>
-                        3
-                      </td>
-                      <td>
-                        TB - Monthly
-                      </td>
-                      <td>
-                        03/04/2012
-                      </td>
-                      <td>
-                        Pending
-                      </td>
-                    </tr>
-                    <tr class="info">
-                      <td>
-                        4
-                      </td>
-                      <td>
-                        TB - Monthly
-                      </td>
-                      <td>
-                        04/04/2012
-                      </td>
-                      <td>
-                        Call in to confirm
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+            <script type="text/template" id="systemSettings_tpl">
+              <h2> <%= title %> </h2>
+              <hr />
+              <div class="row clearfix">
+                <div class="col-md-12 column">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <% _.each(index, function(i) { %>
+                          <th>
+                            <%= i %>
+                          </th>
+                        <% }) %>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% _.each(table, function(e, i) { %>
+                      <tr class="success">
+                        <td>
+                          <%= i %>
+                        </td>
+                        <td>
+                          <%= e.name %>
+                        </td>
+                        <td>
+                          <select class="<%= name %><%= e.name %>_selectpicker">
+                            <% _.each(e.value, function(v) { %>
+                                <option><%= v %></option>
+                            <% }) %>
+                          </select>
+                        </td>
+                        <td>
+                          <%= e.info %>
+                        </td>
+                      </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                  <button type="button" class="btn btn-default w-100 mt-2" onclick="<%= name %>_<%= button %>_click()"> <%= button %> </button>
+                </div>
               </div>
-            </div>
+            </script>
           </div>
           <div class="devicePositionMap">
             <h2> Device Position Map </h2>

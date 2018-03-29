@@ -2,6 +2,7 @@ class Context{
     constructor() {
         this.currentPage = "systemSettings";
         this.config = null;
+        this.currentSettings = {};
     }
 }
 
@@ -38,9 +39,27 @@ function deviceTemperature_click() {
     navDisplayControl("deviceTemperature");
 }
 
+function systemSettings_Save_click() {
+
+    context.currentSettings["Country"] = $(".systemSettingsCountry_selectpicker")[0].options[$(".systemSettingsCountry_selectpicker")[0].selectedIndex].value;
+
+    console.log(context.currentSettings);
+
+}
+
 $(function(){ 
     $.get("js/config.json", function(src) {
-        console.log(src);
-        context = src;
+        context.config = src;
+        console.log(context.config);
+        console.log(context.config.nav);
+
+        var nav_compiled = _.template($("#nav_tpl")[0].innerHTML);
+        var nav_html = nav_compiled(context.config.nav);
+        $(".leftContainer")[0].innerHTML = nav_html;
+
+        var systemSettings_compiled = _.template($("#systemSettings_tpl")[0].innerHTML);
+        var systemSettings_html = systemSettings_compiled(context.config.systemSettings);
+        $(".systemSettings")[0].innerHTML = systemSettings_html;
+
     });
 });

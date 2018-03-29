@@ -1,3 +1,21 @@
 {
-    "title":"IoT Demo"
+    "title":"IoT Demo",
+    "nav": { 
+        "systemSettings" : "System Settings", 
+        "devicePositionMap" : "Device Position Map", 
+        "deviceTemperature" : "Device Temperature" 
+    },
+    "systemSettings" : {
+        "name" : "systemSettings",
+        "title" : "System Settings", 
+        "index" : ["Index", "Name", "Value", "Info"],
+        "table" : {
+            "1" : {
+                "name" : "Country", 
+                "value" : ["ShenZhen", "ShangHai", "BeiJing"], 
+                "info" : "Address"
+            }
+        },
+        "button" : "Save"
+    }
 }
