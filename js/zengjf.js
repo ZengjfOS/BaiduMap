@@ -1,15 +1,26 @@
+class Context{
+    constructor() {
+        this.currentPage = "systemSettings";
+        this.config = null;
+    }
+}
+
+context = new Context()
+
 function navDisplayControl(type) {
     var navArray = ["systemSettings", "devicePositionMap", "deviceTemperature"];
 
     for (t in navArray) {
         var divElement = $($("." + navArray[t])[0]);
         if (navArray[t] == type) {
-            console.log(navArray[t]);
+            context.currentPage = navArray[t];
             divElement.css('display', 'block');
         } else {
             divElement.css('display', 'none');
         }
     }
+
+    console.log(context.currentPage);
 }
 
 function systemSettings_click() {
@@ -26,3 +37,10 @@ function deviceTemperature_click() {
     console.log($(".deviceTemperature")[0]);
     navDisplayControl("deviceTemperature");
 }
+
+$(function(){ 
+    $.get("js/config.json", function(src) {
+        console.log(src);
+        context = src;
+    });
+});

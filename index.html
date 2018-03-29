@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="css/zengjf.css">
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=YaWHwD3tcgfMSlyNXYWnrkGWgSq3raMo"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="js/underscore-min.js"></script>
     <script src="js/zengjf.js"></script>
 
     <title>IoT Demo</title>
@@ -19,12 +19,12 @@
     <div class="container">
       <div class="row clearfix">
         <div class="col-md-12 column topContainer text-center">
-          <h1> IoT Demo </h1>
+          <h2> IoT Demo </h2>
         </div>
       </div>
       <div class="row clearfix bottomContainer">
         <div class="col-md-3 column text-center leftContainer">
-          <h4> Menu </h4>
+          <h2> Menu </h2>
           <hr />
           <button type="button" class="btn btn-default w-100 mt-2" onclick="systemSettings_click()"> System Settings</button>
           <button type="button" class="btn btn-default w-100 mt-2" onclick="devicePositionMap_click()">Device Position Map</button>
@@ -35,6 +35,86 @@
           <div class="systemSettings">
             <h2> System Settings </h2>
             <hr />
+            <div class="row clearfix">
+              <div class="col-md-12 column">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>
+                        index
+                      </th>
+                      <th>
+                        name
+                      </th>
+                      <th>
+                        value
+                      </th>
+                      <th>
+                        Info
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="success">
+                      <td>
+                        1
+                      </td>
+                      <td>
+                        Country
+                      </td>
+                      <td>
+                        01/04/2012
+                      </td>
+                      <td>
+                        Approved
+                      </td>
+                    </tr>
+                    <tr class="error">
+                      <td>
+                        2
+                      </td>
+                      <td>
+                        TB - Monthly
+                      </td>
+                      <td>
+                        02/04/2012
+                      </td>
+                      <td>
+                        Declined
+                      </td>
+                    </tr>
+                    <tr class="warning">
+                      <td>
+                        3
+                      </td>
+                      <td>
+                        TB - Monthly
+                      </td>
+                      <td>
+                        03/04/2012
+                      </td>
+                      <td>
+                        Pending
+                      </td>
+                    </tr>
+                    <tr class="info">
+                      <td>
+                        4
+                      </td>
+                      <td>
+                        TB - Monthly
+                      </td>
+                      <td>
+                        04/04/2012
+                      </td>
+                      <td>
+                        Call in to confirm
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
           <div class="devicePositionMap">
             <h2> Device Position Map </h2>
