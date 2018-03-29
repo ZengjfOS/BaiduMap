@@ -32,35 +32,23 @@ function systemSettings_click() {
 function devicePositionMap_click() {
     console.log($(".devicePositionMap")[0]);
     navDisplayControl("devicePositionMap");
+
+    // 百度地图API功能
+    var map = new BMap.Map("baidumap");    // 创建Map实例
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+    //添加地图类型控件
+    map.addControl(new BMap.MapTypeControl({
+        mapTypes:[
+            BMAP_NORMAL_MAP,
+            BMAP_HYBRID_MAP
+        ]}));      
+    map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 }
 
 function deviceTemperature_click() {
     console.log($(".deviceTemperature")[0]);
     navDisplayControl("deviceTemperature");
-}
-
-function systemSettings_Save_click() {
-
-    context.currentSettings["Country"] = $(".systemSettingsCountry_selectpicker")[0].options[$(".systemSettingsCountry_selectpicker")[0].selectedIndex].value;
-
-    console.log(context.currentSettings);
-}
-
-$(function(){ 
-    $.get("js/config.json", function(src) {
-        context.config = src;
-        console.log(context.config);
-        console.log(context.config.nav);
-
-        var nav_compiled = _.template($("#nav_tpl")[0].innerHTML);
-        var nav_html = nav_compiled(context.config.nav);
-        $(".leftContainer")[0].innerHTML = nav_html;
-
-        var systemSettings_compiled = _.template($("#systemSettings_tpl")[0].innerHTML);
-        var systemSettings_html = systemSettings_compiled(context.config.systemSettings);
-        $(".systemSettings")[0].innerHTML = systemSettings_html;
-
-    });
 
     var config = {
         type: 'line',
@@ -122,15 +110,28 @@ $(function(){
         window.myLine.update();
     }
 
-    // 百度地图API功能
-    var map = new BMap.Map("baidumap");    // 创建Map实例
-    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
-    //添加地图类型控件
-    map.addControl(new BMap.MapTypeControl({
-        mapTypes:[
-            BMAP_NORMAL_MAP,
-            BMAP_HYBRID_MAP
-        ]}));      
-    map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
-    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+}
+
+function systemSettings_Save_click() {
+
+    context.currentSettings["Country"] = $(".systemSettingsCountry_selectpicker")[0].options[$(".systemSettingsCountry_selectpicker")[0].selectedIndex].value;
+
+    console.log(context.currentSettings);
+}
+
+$(function(){ 
+    $.get("js/config.json", function(src) {
+        context.config = src;
+        console.log(context.config);
+        console.log(context.config.nav);
+
+        var nav_compiled = _.template($("#nav_tpl")[0].innerHTML);
+        var nav_html = nav_compiled(context.config.nav);
+        $(".leftContainer")[0].innerHTML = nav_html;
+
+        var systemSettings_compiled = _.template($("#systemSettings_tpl")[0].innerHTML);
+        var systemSettings_html = systemSettings_compiled(context.config.systemSettings);
+        $(".systemSettings")[0].innerHTML = systemSettings_html;
+
+    });
 });
