@@ -3,10 +3,64 @@ class Context{
         this.currentPage = "systemSettings";
         this.config = null;
         this.currentSettings = {};
+        this.mqtt = null;
     }
 }
 
-context = new Context()
+class BaiduIoTHubMQTT {
+    constructor(address, port, username, passwd, topic) {
+        // Create a client instance
+        this.client = new Paho.MQTT.Client(address, port, "DeviceId-" + Math.random().toString(36).substring(7));
+        this.username = username;
+        this.passwd = passwd;
+        this.topic = topic;
+        this.connected = false;
+        
+        // set callback handlers
+        this.client.onConnectionLost = this.onConnectionLost;
+        this.client.onMessageArrived = this.onMessageArrived;
+        this.connect();
+    }
+
+    connect() {
+        // connect the client
+        this.client.connect({onSuccess:this.onConnect, onFailure:this.onConnectError, userName:this.username, password:this.passwd, useSSL:true});
+    }
+
+    // called when the client connects
+    onConnect() {
+        // Once a connection has been made, make a subscription and send a message.
+        this.connected = true;
+        console.log("mqtt connect");
+    }
+
+    subscribe(topic) {
+        // context.mqtt.client.unsubscribe(this.topic);
+        // context.mqtt.client.subscribe(topic);
+        if (this.connected) {
+            this.client.unsubscribe(this.topic);
+            this.client.subscribe(topic);
+            this.topic = topic;
+        }
+    }
+
+    // called when the client connects
+    onConnectError() {
+        this.connected = false;
+        console.log("mqtt connect error");
+    }
+    
+    // called when the client loses its connection
+    onConnectionLost(responseObject) {
+        console.log(responseObject);
+    }
+    
+    // called when a message arrives
+    onMessageArrived(message) {
+        var stminfo = JSON.parse(message.payloadString);
+        console.log(stminfo);
+    }
+}
 
 function navDisplayControl(type) {
     var navArray = ["systemSettings", "devicePositionMap", "deviceTemperature"];
@@ -109,17 +163,20 @@ function deviceTemperature_click() {
 
         window.myLine.update();
     }
-
 }
 
 function systemSettings_Save_click() {
 
     context.currentSettings["Country"] = $(".systemSettingsCountry_selectpicker")[0].options[$(".systemSettingsCountry_selectpicker")[0].selectedIndex].value;
+    context.mqtt.client.subscribe("DataTransfer");
 
     console.log(context.currentSettings);
 }
 
 $(function(){ 
+    context = new Context();
+    context.mqtt = new BaiduIoTHubMQTT("baidumap.mqtt.iot.gz.baidubce.com", 8884, "baidumap/iotmap", "bjBb+EUd5rwfo9fBaZUMlwG8psde+abMx35m/euTUfE=", "DataTransfer");
+
     $.get("js/config.json", function(src) {
         context.config = src;
         console.log(context.config);
