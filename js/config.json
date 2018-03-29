@@ -11,11 +11,11 @@
         "index" : ["Index", "Name", "Value", "Info"],
         "table" : {
             "1" : {
-                "name" : "Country", 
+                "name" : "City", 
                 "value" : ["ShenZhen", "ShangHai", "BeiJing"], 
                 "info" : "Address"
             }
         },
-        "button" : "Save"
+        "button" : "Subscribe"
     }
 }
