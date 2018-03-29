@@ -44,7 +44,6 @@ function systemSettings_Save_click() {
     context.currentSettings["Country"] = $(".systemSettingsCountry_selectpicker")[0].options[$(".systemSettingsCountry_selectpicker")[0].selectedIndex].value;
 
     console.log(context.currentSettings);
-
 }
 
 $(function(){ 
@@ -62,4 +61,76 @@ $(function(){
         $(".systemSettings")[0].innerHTML = systemSettings_html;
 
     });
+
+    var config = {
+        type: 'line',
+        data: {
+            labels: ['0'],
+            datasets: [{
+                label: 'Show Temperature Curve',
+                backgroundColor: window.chartColors.red,
+                borderColor: window.chartColors.red,
+                data: [
+                    0
+                ],
+                fill: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Temperature Chart'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Timestamp'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Value'
+                    }
+                }]
+            }
+        }
+    };
+
+    var ctx = document.getElementById('deviceTemperatureChart').getContext('2d');
+    window.myLine = new Chart(ctx, config);
+
+    if (config.data.datasets.length > 0) {
+        config.data.labels.push(1);
+
+        config.data.datasets.forEach(function(dataset) {
+            dataset.data.push(randomScalingFactor());
+        });
+
+        window.myLine.update();
+    }
+
+    // 百度地图API功能
+    var map = new BMap.Map("baidumap");    // 创建Map实例
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+    //添加地图类型控件
+    map.addControl(new BMap.MapTypeControl({
+        mapTypes:[
+            BMAP_NORMAL_MAP,
+            BMAP_HYBRID_MAP
+        ]}));      
+    map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 });

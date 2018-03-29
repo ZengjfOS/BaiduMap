@@ -42,3 +42,7 @@ html, body {
 .deviceTemperature {
     display: none;
 }
+
+#baidumap {
+    height: 599px;
+}
