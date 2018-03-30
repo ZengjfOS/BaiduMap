@@ -65,9 +65,21 @@ class BaiduIoTHubMQTT {
     onMessageArrived(message) {
         var stminfo = JSON.parse(message.payloadString);
 
-        var point = new BMap.Point(stminfo["longitude"], stminfo["latitude"]);
         if (context.map != null) {
+            var point = new BMap.Point(stminfo["longitude"], stminfo["latitude"]);
+            var marker = new BMap.Marker(point);
             context.map.setCenter(point);
+            context.map.addOverlay(marker);
+            var opts = {
+                width : 200,
+                height: 100,
+                title : "Device Infomation" ,
+                enableMessage:true
+            }
+            var infoWindow = new BMap.InfoWindow(String(stminfo["temperature"]) + " ℃", opts);
+            marker.addEventListener("click", function(){          
+                context.map.openInfoWindow(infoWindow, point);
+            });
         }
 
         if (context.temperature != null) {
@@ -203,10 +215,18 @@ function deviceTemperature_click() {
 function systemSettings_Subscribe_click() {
     if (($($(".subscribeButton")[0]).text()).trim() == "Subscribe") {
         context.currentSettings["city"] = $(".systemSettingsCity_selectpicker")[0].options[$(".systemSettingsCity_selectpicker")[0].selectedIndex].value;
-        context.mqtt.subscribe("baidumap/iot/" + context.currentSettings["city"] + "/DataTransfer");
+        if (context.currentSettings["city"] == "ALL") {
+            context.mqtt.subscribe("baidumap/iot/+/DataTransfer");
+        } else {
+            context.mqtt.subscribe("baidumap/iot/" + context.currentSettings["city"] + "/DataTransfer");
+        }
         $($(".subscribeButton")[0]).text("UnSubscribe");
     } else {
-        context.mqtt.unsubscribe("baidumap/iot/" + context.currentSettings["city"] + "/DataTransfer");
+        if (context.currentSettings["city"] == "ALL") {
+            context.mqtt.unsubscribe("baidumap/iot/+/DataTransfer");
+        } else {
+            context.mqtt.unsubscribe("baidumap/iot/" + context.currentSettings["city"] + "/DataTransfer");
+        }
         $($(".subscribeButton")[0]).text("Subscribe");
     }
     console.log(context.currentSettings);

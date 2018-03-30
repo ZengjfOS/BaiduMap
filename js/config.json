@@ -12,7 +12,7 @@
         "table" : {
             "1" : {
                 "name" : "City", 
-                "value" : ["ShenZhen", "ShangHai", "BeiJing"], 
+                "value" : ["ALL", "ShenZhen", "ShangHai", "BeiJing"], 
                 "info" : "Address"
             }
         },
