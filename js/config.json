@@ -17,5 +17,8 @@
             }
         },
         "button" : "Subscribe"
+    },
+    "deviceTemperature" : {
+        "chartLength" : 10
     }
 }

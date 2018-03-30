@@ -72,9 +72,14 @@ class BaiduIoTHubMQTT {
 
         if (context.temperature != null) {
             if (context.temperature.config.data.datasets.length > 0) {
+                if (context.temperature.config.data.labels.length > context.config.deviceTemperature.chartLength) {
+                    context.temperature.config.data.labels.shift();
+                }
                 context.temperature.config.data.labels.push(stminfo["timestamp"]);
 
                 context.temperature.config.data.datasets.forEach(function(dataset) {
+                    if (dataset.data.length > context.config.deviceTemperature.chartLength)
+                        dataset.data.shift();
                     dataset.data.push(stminfo["temperature"]);
                 });
 
