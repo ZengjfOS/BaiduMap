@@ -6,6 +6,7 @@ class Context{
         this.mqtt = null;
         this.map = null;
         this.temperature = null;
+        this.cityCount = 0;
     }
 }
 
@@ -87,12 +88,16 @@ class BaiduIoTHubMQTT {
                 if (context.temperature.config.data.labels.length > context.config.deviceTemperature.chartLength) {
                     context.temperature.config.data.labels.shift();
                 }
-                context.temperature.config.data.labels.push(stminfo["timestamp"]);
+
+                if (context.cityCount++ % 3 == 0)
+                    context.temperature.config.data.labels.push(stminfo["timestamp"]);
 
                 context.temperature.config.data.datasets.forEach(function(dataset) {
-                    if (dataset.data.length > context.config.deviceTemperature.chartLength)
-                        dataset.data.shift();
-                    dataset.data.push(stminfo["temperature"]);
+                    if (dataset.label == stminfo["name"]) {
+                        if (dataset.data.length > context.config.deviceTemperature.chartLength)
+                            dataset.data.shift();
+                        dataset.data.push(stminfo["temperature"]);
+                    }
                 });
 
                 context.temperature.update();
@@ -130,7 +135,7 @@ function devicePositionMap_click() {
     if (context.map == null) {
         // 百度地图API功能
         context.map = new BMap.Map("baidumap");                         // 创建Map实例
-        context.map.centerAndZoom(new BMap.Point(116.404, 39.915), 11); // 初始化地图,设置中心点坐标和地图级别
+        context.map.centerAndZoom(new BMap.Point(116.404, 39.915), 3); // 初始化地图,设置中心点坐标和地图级别
         //添加地图类型控件
         context.map.addControl(new BMap.MapTypeControl({
             mapTypes:[
@@ -152,9 +157,25 @@ function deviceTemperature_click() {
             data: {
                 labels: ['0'],
                 datasets: [{
-                    label: 'Show Temperature Curve',
+                    label: 'BeiJing',
                     backgroundColor: window.chartColors.red,
                     borderColor: window.chartColors.red,
+                    data: [
+                        0
+                    ],
+                    fill: false,
+                }, {
+                    label: 'ShangHai',
+                    backgroundColor: window.chartColors.yellow,
+                    borderColor: window.chartColors.yellow,
+                    data: [
+                        0
+                    ],
+                    fill: false,
+                }, {
+                    label: 'ShenZhen',
+                    backgroundColor: window.chartColors.green,
+                    borderColor: window.chartColors.green,
                     data: [
                         0
                     ],
