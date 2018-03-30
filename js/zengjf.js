@@ -88,9 +88,12 @@ class BaiduIoTHubMQTT {
                 if (context.temperature.config.data.labels.length > context.config.deviceTemperature.chartLength) {
                     context.temperature.config.data.labels.shift();
                 }
-
-                if (context.cityCount++ % 3 == 0)
+                if (context.currentSettings["city"] == "ALL") {
+                    if (context.cityCount++ % 3 == 0)
+                        context.temperature.config.data.labels.push(stminfo["timestamp"]);
+                } else {
                     context.temperature.config.data.labels.push(stminfo["timestamp"]);
+                }
 
                 context.temperature.config.data.datasets.forEach(function(dataset) {
                     if (dataset.label == stminfo["name"]) {
@@ -243,7 +246,8 @@ function systemSettings_Subscribe_click() {
         }
         $($(".subscribeButton")[0]).text("UnSubscribe");
 
-        context.map.clearOverlays();
+        if (context.map != null)
+            context.map.clearOverlays();
     } else {
         if (context.currentSettings["city"] == "ALL") {
             context.mqtt.unsubscribe("baidumap/iot/+/DataTransfer");
