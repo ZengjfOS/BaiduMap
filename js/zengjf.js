@@ -138,7 +138,7 @@ function devicePositionMap_click() {
     if (context.map == null) {
         // 百度地图API功能
         context.map = new BMap.Map("baidumap");                         // 创建Map实例
-        context.map.centerAndZoom(new BMap.Point(116.404, 39.915), 3); // 初始化地图,设置中心点坐标和地图级别
+        context.map.centerAndZoom(new BMap.Point(116.404, 39.915), 1); // 初始化地图,设置中心点坐标和地图级别
         //添加地图类型控件
         context.map.addControl(new BMap.MapTypeControl({
             mapTypes:[
