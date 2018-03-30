@@ -242,6 +242,8 @@ function systemSettings_Subscribe_click() {
             context.mqtt.subscribe("baidumap/iot/" + context.currentSettings["city"] + "/DataTransfer");
         }
         $($(".subscribeButton")[0]).text("UnSubscribe");
+
+        context.map.clearOverlays();
     } else {
         if (context.currentSettings["city"] == "ALL") {
             context.mqtt.unsubscribe("baidumap/iot/+/DataTransfer");
