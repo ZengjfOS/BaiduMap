@@ -11,6 +11,7 @@ class Simulation (threading.Thread):
         threading.Thread.__init__(self)
         self.lat_long = data
         self.name = name
+        self.dataTransfer = DataTransfer()
 
     def run(self):
         while True:
@@ -21,7 +22,8 @@ class Simulation (threading.Thread):
             data["brightness"] = generate_random_brightness()
             data["name"] = self.name
 
-            dataTransfer.send(data)
+            self.dataTransfer.send(data)
+            print(data)
 
             time.sleep(5)
 
