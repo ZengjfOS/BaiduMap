@@ -1,6 +1,6 @@
 # Baidu Map
 
-![./img/BaiduMap.gif](./img/BaiduMap.gif)
+![./img/BaiduMap.gif](./images/BaiduMap.gif)
 
 ## Refers
 
