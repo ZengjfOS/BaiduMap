@@ -264,16 +264,28 @@ $(function(){
     context.mqtt = new BaiduIoTHubMQTT("baidumap.mqtt.iot.gz.baidubce.com", 8884, "baidumap/iotmap", "bjBb+EUd5rwfo9fBaZUMlwG8psde+abMx35m/euTUfE=", "DataTransfer");
 
     $.get("js/config.json", function(src) {
-        context.config = src;
+        context.config = JSON.parse(src);
         console.log(context.config);
         console.log(context.config.nav);
 
-        var nav_compiled = _.template($("#nav_tpl")[0].innerHTML);
-        var nav_html = nav_compiled(context.config.nav);
-        $(".leftContainer")[0].innerHTML = nav_html;
+        $.get("tpls/nav.tpl", function(src) {
+            var nav_compiled = _.template(src);
+            var nav_html = nav_compiled(context.config.nav);
+            
+            $(".leftContainer")[0].innerHTML = nav_html;
 
-        var systemSettings_compiled = _.template($("#systemSettings_tpl")[0].innerHTML);
-        var systemSettings_html = systemSettings_compiled(context.config.systemSettings);
-        $(".systemSettings")[0].innerHTML = systemSettings_html;
+            $("#systemSettings_click").click(systemSettings_click);
+            $("#devicePositionMap_click").click(devicePositionMap_click);
+            $("#deviceTemperature_click").click(deviceTemperature_click);
+        });
+
+        $.get("tpls/systemSetings.tpl", function(src) {
+            var systemSettings_compiled = _.template(src);
+            var systemSettings_html = systemSettings_compiled(context.config.systemSettings);
+
+            $(".systemSettings")[0].innerHTML = systemSettings_html;
+
+            $("#systemSettings_Subscribe_click").click(systemSettings_Subscribe_click);
+        });
     });
 });
