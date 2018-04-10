@@ -1,14 +1,14 @@
 {
     "manifest_version": 2,
-    "name": "AplexOS",
-    "description": "Aplex Open Source Team",
+    "name": "IoT Demo",
+    "description": "Show IoT Demo",
     "version": "0.0.1",
 	"background": {
         "scripts": ["js/background.js"]
 	},
     "browser_action": {
         "default_icon": "images/icon.png",
-        "default_title": "Aplex Open Source Plugin"
+        "default_title": "IoT Demo Plugin"
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval' https://code.jquery.com https://api.map.baidu.com https://cdnjs.cloudflare.com https://maxcdn.bootstrapcdn.com; object-src 'self'",
     "permissions": [       
