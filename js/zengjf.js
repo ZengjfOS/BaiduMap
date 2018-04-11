@@ -3,10 +3,11 @@ class Context{
         this.currentPage = "systemSettings";
         this.config = null;
         this.currentSettings = {};
-        this.mqtt = null;
-        this.map = null;
-        this.temperature = null;
-        this.cityCount = 0;
+        this.mqtt = null;                       // mqtt client
+        this.map = null;                        // 百度地图
+        this.temperature = null;                // 温度
+        this.cityCount = 0;                     // 城市计数
+        this.positions = new Array();
     }
 }
 
@@ -66,47 +67,10 @@ class BaiduIoTHubMQTT {
     onMessageArrived(message) {
         var stminfo = JSON.parse(message.payloadString);
 
-        if (context.map != null) {
-            var point = new BMap.Point(stminfo["longitude"], stminfo["latitude"]);
-            var marker = new BMap.Marker(point);
-            context.map.setCenter(point);
-            context.map.addOverlay(marker);
-            var opts = {
-                width : 200,
-                height: 100,
-                title : "Device Infomation" ,
-                enableMessage:true
-            }
-            var infoWindow = new BMap.InfoWindow(String(stminfo["temperature"]) + " ℃", opts);
-            marker.addEventListener("click", function(){          
-                context.map.openInfoWindow(infoWindow, point);
-            });
-        }
+        context.positions[stminfo["name"]] = stminfo;
 
-        if (context.temperature != null) {
-            if (context.temperature.config.data.datasets.length > 0) {
-                if (context.temperature.config.data.labels.length > context.config.deviceTemperature.chartLength) {
-                    context.temperature.config.data.labels.shift();
-                }
-                if (context.currentSettings["city"] == "ALL") {
-                    if (context.cityCount++ % 3 == 0)
-                        context.temperature.config.data.labels.push(stminfo["timestamp"]);
-                } else {
-                    context.temperature.config.data.labels.push(stminfo["timestamp"]);
-                }
-
-                context.temperature.config.data.datasets.forEach(function(dataset) {
-                    if (dataset.label == stminfo["name"]) {
-                        if (dataset.data.length > context.config.deviceTemperature.chartLength)
-                            dataset.data.shift();
-                        dataset.data.push(stminfo["temperature"]);
-                    }
-                });
-
-                context.temperature.update();
-            }
-        }
-        console.log(stminfo);
+        // console.log(stminfo);
+        // console.log(context.positions);
     }
 }
 
@@ -248,6 +212,9 @@ function systemSettings_Subscribe_click() {
 
         if (context.map != null)
             context.map.clearOverlays();
+
+        if (context.map != null)
+            context.positions = new Array();
     } else {
         if (context.currentSettings["city"] == "ALL") {
             context.mqtt.unsubscribe("baidumap/iot/+/DataTransfer");
@@ -257,6 +224,60 @@ function systemSettings_Subscribe_click() {
         $($(".subscribeButton")[0]).text("Subscribe");
     }
     console.log(context.currentSettings);
+}
+
+function circulateExecute() {
+
+    console.log("circulateExecute");
+
+    for (var i in context.positions) { 
+
+        stminfo = context.positions[i];
+        if (context.map != null) {
+            var point = new BMap.Point(stminfo["longitude"], stminfo["latitude"]);
+            var marker = new BMap.Marker(point);
+            // context.map.setCenter(point);
+            context.map.addOverlay(marker);
+            var opts = {
+                width : 200,
+                height: 100,
+                title : "Device Infomation" ,
+                enableMessage:true
+            }
+            var infoWindow = new BMap.InfoWindow(String(stminfo["temperature"]) + " ℃", opts);
+            marker.addEventListener("click", function(){          
+                context.map.openInfoWindow(infoWindow, point);
+            });
+        }
+
+        if (context.temperature != null) {
+            if (context.temperature.config.data.datasets.length > 0) {
+                if (context.temperature.config.data.labels.length > context.config.deviceTemperature.chartLength) {
+                    context.temperature.config.data.labels.shift();
+                }
+                if (context.currentSettings["city"] == "ALL") {
+                    // if (context.cityCount++ % context.positions.length == 0) {
+                    if (context.cityCount++ % 3 == 0) {
+                        context.temperature.config.data.labels.push(stminfo["timestamp"]);
+                    }
+                } else {
+                    context.temperature.config.data.labels.push(stminfo["timestamp"]);
+                }
+
+                context.temperature.config.data.datasets.forEach(function(dataset) {
+                    if (dataset.label == stminfo["name"]) {
+                        if (dataset.data.length > context.config.deviceTemperature.chartLength)
+                            dataset.data.shift();
+                        dataset.data.push(stminfo["temperature"]);
+                    }
+                });
+
+                context.temperature.update();
+            }
+        }
+    }
+
+    context.positions = new Array();
 }
 
 $(function(){ 
@@ -288,4 +309,6 @@ $(function(){
             $("#systemSettings_Subscribe_click").click(systemSettings_Subscribe_click);
         });
     });
+
+    setInterval("circulateExecute();", 2000);
 });
