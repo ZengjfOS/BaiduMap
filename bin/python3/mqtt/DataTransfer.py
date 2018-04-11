@@ -13,38 +13,29 @@ class DataTransfer(threading.Thread):
     __mutex = threading.Lock()
     __mqttc = None
 
-    # 使用单例模式来生成统一的对象
-    def __new__(cls, *args, **kwargs):
+    def __init__(self):
+        print("in init")
 
-        if not hasattr(cls, "_inst"):
+        self.connect();
 
-            # 单例对象
-            cls._inst = super(DataTransfer, cls).__new__(cls)
-            cls.connect()
+    def connect(self):
+        self.__mutex.acquire()
+        self.__mqttc = mqtt.Client(client_id="DeviceId-" + '%06x' % random.randrange(16**12))
+        self.__mqttc.username_pw_set("baidumap/iotmap", "bjBb+EUd5rwfo9fBaZUMlwG8psde+abMx35m/euTUfE=")
+        self.__mqttc.connect('baidumap.mqtt.iot.gz.baidubce.com', port=1883)
+        self.__mutex.release()
 
-        return cls._inst
-
-    @classmethod
-    def connect(cls):
-        cls.__mutex.acquire()
-        cls.__mqttc = mqtt.Client(client_id="DeviceId-" + '%06x' % random.randrange(16**12))
-        cls.__mqttc.username_pw_set("baidumap/iotmap", "bjBb+EUd5rwfo9fBaZUMlwG8psde+abMx35m/euTUfE=")
-        cls.__mqttc.connect('baidumap.mqtt.iot.gz.baidubce.com', port=1883)
-        cls.__mutex.release()
-
-    @classmethod
-    def send(cls, json_data):
+    def send(self, json_data):
         json_data["timestamp"] = int(time.time())
         msg = json.dumps(json_data)
 
         try:
-            cls.__mutex.acquire()
-            cls.__mqttc.publish('DataTransfer', payload=msg)
-            cls.__mutex.release()
+            self.__mutex.acquire()
+            self.__mqttc.publish('baidumap/iot/' + json_data["name"] + '/DataTransfer', payload=msg)
+            self.__mutex.release()
         except:
-            cls.connect()
+            self.connect()
 
-dataTransfer = DataTransfer()
 
 if __name__ == '__main__':
 
@@ -53,5 +44,6 @@ if __name__ == '__main__':
         'value': 10
     }
 
+    dataTransfer = DataTransfer()
     dataTransfer.send(msg)
 

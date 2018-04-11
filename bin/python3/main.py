@@ -7,11 +7,12 @@ from Simulation import *
 from Utils.RandomString import *
 
 def main():
-    lat_longs = generate_random_lat_long(config.getVal(["common", "simulationThreads"]))
-    print(lat_longs)
+    # lat_longs = generate_random_lat_long(config.getVal(["common", "simulationThreads"]))
+    # print(lat_longs)
 
-    for lat_long in lat_longs:
-        simulation = Simulation(randomString(), lat_long)
+    for city in ConfigureWin.config["citys"]:
+        city_json = ConfigureWin.config["citys"][city]
+        simulation = Simulation(city, (city_json["latitude"], city_json["longitude"]))
         simulation.start()
 
 # ak=bjBb+EUd5rwfo9fBaZUMlwG8psde+abMx35m/euTUfE=
